@@ -1,0 +1,532 @@
+/* ============================================================
+   Child Care Professionals of BC
+   Shared stylesheet
+   ------------------------------------------------------------
+   Palette sampled from the CCPBC logo. Contrast ratios checked
+   against WCAG AA. Change a token here, it changes everywhere.
+   ============================================================ */
+
+:root {
+  /* Colour — pink and white */
+  --plum:     #3B1626;  /* text and dark bands      15.8:1 on white */
+  --plum-lt:  #55223A;  /* hover on plum                            */
+  --rose:     #A83A5B;  /* primary: buttons, links   6.1:1 w/ white */
+  --rose-dk:  #8C2C49;  /* primary hover                            */
+  --petal:    #E7A9BD;  /* the logo's wash colour   8.1:1 w/ plum   */
+  --petal-lt: #EFC6D3;  /* softer wash tone                         */
+  --blush:    #FBEFF3;  /* light section background                 */
+  --white:    #FFFFFF;
+  --muted:    #7A5262;  /* secondary text on light   6.5:1 on white */
+  --muted-lt: #E2C3CF;  /* secondary text on plum                   */
+  --line:     #F0D6DF;  /* hairlines on light                       */
+  --line-dk:  #5A3145;  /* hairlines on plum                        */
+
+  /* Type — Playfair Display echoes the serif in the logo mark */
+  --display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --body:    "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+
+  /* Layout */
+  --wrap: 1140px;
+  --gutter: 24px;
+  --band-y: 96px;
+  --radius: 2px;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--plum);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--rose); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--rose-dk); }
+
+:focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--rose); color: var(--white);
+  padding: 12px 20px; font-weight: 700; z-index: 200;
+}
+.skip:focus { left: 0; }
+
+/* ---------- Layout helpers ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+.wrap--narrow { max-width: 780px; }
+
+.band { padding-top: var(--band-y); padding-bottom: var(--band-y); }
+.band--tight { padding-top: 64px; padding-bottom: 64px; }
+.band--paper  { background: var(--blush); }
+.band--ink    { background: var(--plum);  color: var(--white); }
+.band--petal { background: var(--petal); color: var(--plum); }
+
+.band--ink a { color: var(--petal); }
+.band--ink p { color: #EBD6DE; }
+.band--petal a { color: var(--rose-dk); }
+
+/* ---------- Type ---------- */
+.eyebrow {
+  font-family: var(--body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow::before {
+  content: "";
+  width: 34px; height: 2px;
+  background: var(--petal);
+  flex: none;
+}
+.band--ink .eyebrow { color: var(--petal); }
+.band--ink .eyebrow::before { background: var(--rose); }
+.band--petal .eyebrow { color: var(--rose-dk); }
+.band--petal .eyebrow::before { background: var(--plum); }
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+
+/* Serif capitals need a little tracking and air, unlike a grotesque */
+h1 {
+  font-size: clamp(2.3rem, 5.4vw, 4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 1.1;
+}
+h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.7rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.14;
+}
+h3 { font-size: 1.3rem; line-height: 1.3; letter-spacing: 0; }
+h4 {
+  font-family: var(--body);
+  font-size: 0.76rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  line-height: 1.4;
+}
+
+p { margin: 0 0 20px; }
+p:last-child { margin-bottom: 0; }
+
+.lede {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--muted);
+}
+.band--ink .lede { color: #E4CBD5; }
+.band--petal .lede { color: var(--plum); }
+
+/* Signature: the logo's wash colour, brushed behind a word */
+.mark { position: relative; display: inline-block; z-index: 0; }
+.mark::after {
+  content: "";
+  position: absolute;
+  left: -0.1em; right: -0.1em;
+  bottom: 0.04em;
+  height: 0.36em;
+  background: var(--petal);
+  z-index: -1;
+}
+.band--petal .mark::after { background: var(--white); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+.btn--primary { background: var(--rose); color: var(--white); }
+.btn--primary:hover { background: var(--rose-dk); color: var(--white); }
+.btn--dark { background: var(--plum); color: var(--white); }
+.btn--dark:hover { background: var(--plum-lt); color: var(--white); }
+.btn--ghost { border-color: currentColor; background: transparent; color: inherit; }
+.btn--ghost:hover { background: var(--plum); border-color: var(--plum); color: var(--white); }
+.band--ink .btn--ghost:hover { background: var(--white); border-color: var(--white); color: var(--plum); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+/* ---------- Header ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.topbar__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; min-height: 84px;
+}
+.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--plum); }
+.brand__logo { height: 46px; width: auto; flex: none; }
+.brand__name {
+  font-family: var(--body);
+  font-weight: 700; font-size: 0.78rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  line-height: 1.3;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+.brand__name span {
+  display: block; font-weight: 600;
+  font-size: 0.68rem; letter-spacing: 0.12em; color: var(--muted);
+}
+
+.nav { display: flex; align-items: center; gap: 22px; }
+.nav a {
+  font-family: var(--body);
+  font-size: 0.76rem; font-weight: 600;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  text-decoration: none; color: var(--plum);
+  padding-top: 6px; padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+}
+.nav a:hover { color: var(--rose); border-bottom-color: var(--petal); }
+.nav a[aria-current="page"] { color: var(--rose); border-bottom-color: var(--rose); }
+.nav .btn { padding: 12px 22px; font-size: 0.72rem; border-bottom: 0; color: var(--white); }
+.nav .btn:hover { border-bottom: 0; color: var(--white); }
+
+.menu-toggle {
+  display: none;
+  background: none; border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 14px; cursor: pointer;
+  font-family: var(--body); font-size: 0.74rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--plum);
+}
+
+/* ---------- Hero ----------
+   A full-bleed band of your brush stroke across the top of every page,
+   carrying the eyebrow and the headline. The stroke is stretched to the
+   band, which keeps its ragged top and bottom edges — the character of the
+   paint — while the torn left and right ends run off screen.
+   The lede and buttons sit below it on white.                            */
+.hero {
+  background: url("brush.webp") center / 100% 100% no-repeat;
+  color: var(--plum);
+  padding-top: clamp(46px, 5.5vw, 74px);
+  padding-bottom: clamp(50px, 6vw, 80px);
+}
+
+.hero .eyebrow { color: var(--plum); margin-bottom: 14px; }
+.hero .eyebrow::before { background: var(--rose); }
+
+/* Deliberately smaller than headings elsewhere: the type has to sit inside
+   the paint with air around it, not fill it edge to edge. */
+.hero h1 {
+  font-size: clamp(1.6rem, 3.3vw, 2.6rem);
+  max-width: 26ch;
+  margin-bottom: 0;
+}
+
+/* A wash behind a word, inside a wash, reads as a mistake. */
+.hero h1 .mark::after { display: none; }
+
+.hero-intro {
+  padding-top: clamp(34px, 4.5vw, 54px);
+  padding-bottom: clamp(10px, 1.5vw, 18px);
+}
+.hero-intro .lede { max-width: 58ch; }
+.hero-intro .actions { margin-top: 28px; }
+
+.hero--compact {
+  padding-top: clamp(38px, 4.5vw, 60px);
+  padding-bottom: clamp(42px, 5vw, 66px);
+}
+
+/* ---------- Grids ---------- */
+.grid { display: grid; gap: 34px; }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+.grid--split { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--rose);
+  border-radius: var(--radius);
+  padding: 30px 28px;
+}
+.card h3 { margin-bottom: 12px; }
+.card p { font-size: 0.98rem; color: var(--muted); }
+.band--ink .card {
+  background: transparent;
+  border-color: var(--line-dk);
+  border-top-color: var(--petal);
+}
+.band--ink .card h3 { color: var(--white); }
+.band--ink .card p { color: var(--muted-lt); }
+
+/* ---------- Record (advocacy list) ---------- */
+.record { border-top: 1px solid var(--line); margin-top: 8px; }
+.record__row {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 32px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+.record__tag {
+  font-family: var(--body);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--rose);
+  display: flex; align-items: center; gap: 10px;
+}
+.record__tag::before {
+  content: ""; width: 8px; height: 8px; flex: none;
+  background: var(--petal); border-radius: 50%;
+}
+.record__body { margin: 0; font-size: 1.02rem; }
+
+/* ---------- Pull quote ---------- */
+.quote {
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  line-height: 1.35;
+  font-style: italic;
+  margin: 0;
+  max-width: 26ch;
+}
+.quote__source {
+  font-family: var(--body);
+  font-size: 0.72rem; font-style: normal; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--rose-dk);
+  margin-top: 22px; display: block;
+}
+
+/* ---------- Forms ---------- */
+.form { display: grid; gap: 22px; }
+.field { display: grid; gap: 7px; }
+.field label {
+  font-family: var(--body);
+  font-size: 0.74rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.field input, .field select, .field textarea {
+  font: inherit; font-size: 1rem;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--plum);
+  width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--rose); }
+.field__hint { font-size: 0.85rem; color: var(--muted); }
+.field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+.consent {
+  display: grid; grid-template-columns: 22px 1fr; gap: 14px;
+  align-items: start;
+  background: var(--blush);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.consent input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--rose); }
+.consent label { cursor: pointer; }
+
+.form__status {
+  font-size: 0.95rem;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border-left: 3px solid var(--rose);
+  background: var(--blush);
+  color: var(--plum);
+}
+.form__status[hidden] { display: none; }
+
+.hp { position: absolute; left: -5000px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---------- Download panel ---------- */
+.download {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 28px; align-items: center;
+  border: 1px solid var(--petal);
+  outline: 1px solid var(--petal);
+  outline-offset: 6px;
+  border-radius: var(--radius);
+  padding: 32px;
+  background: var(--white);
+}
+.download__icon {
+  width: 58px; height: 58px; flex: none;
+  background: var(--rose); color: var(--white);
+  border-radius: var(--radius); display: grid; place-items: center;
+  font-family: var(--body); font-weight: 700; font-size: 0.78rem;
+  letter-spacing: 0.1em;
+}
+.download h3 { margin-bottom: 6px; }
+.download p { margin: 0; font-size: 0.95rem; color: var(--muted); }
+
+/* ---------- Coming soon ---------- */
+.soon {
+  border: 1px solid var(--petal);
+  outline: 1px solid var(--petal);
+  outline-offset: 6px;
+  border-radius: var(--radius);
+  padding: 56px 40px;
+  text-align: center;
+  background: var(--blush);
+}
+.soon__tag {
+  display: inline-block;
+  font-family: var(--body);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  background: var(--rose); color: var(--white);
+  padding: 8px 18px; border-radius: 100px;
+  margin-bottom: 22px;
+}
+.soon p { max-width: 56ch; margin-left: auto; margin-right: auto; color: var(--muted); }
+
+/* ---------- References ---------- */
+.refs { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+.refs li {
+  font-size: 0.92rem; line-height: 1.55; color: var(--muted);
+  padding-left: 20px; border-left: 2px solid var(--line);
+}
+.refs cite { font-style: italic; }
+
+/* ---------- Contact strip ---------- */
+.contact-strip {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 28px;
+}
+.contact-strip h2 { margin-bottom: 0; max-width: 18ch; }
+
+/* ---------- Footer ---------- */
+.footer {
+  background: var(--plum); color: var(--muted-lt);
+  padding-top: 64px; padding-bottom: 34px;
+}
+.footer__top {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
+  gap: 44px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--line-dk);
+}
+.footer h4 { color: var(--white); margin-bottom: 18px; }
+.footer p { color: var(--muted-lt); font-size: 0.95rem; }
+.footer a { color: var(--petal); }
+.footer a:hover { color: var(--white); }
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.footer ul a { color: var(--muted-lt); text-decoration: none; font-size: 0.95rem; }
+.footer ul a:hover { color: var(--petal); }
+
+/* Footer wordmark: the logo art has a white ground, so on plum we set the
+   name in type rather than dropping a white box into the band. */
+.footer__mark {
+  font-family: var(--display);
+  font-weight: 700; font-size: 1.85rem;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  margin: 0 0 6px;
+}
+.footer__mark::after {
+  content: "";
+  display: block; width: 56px; height: 2px;
+  background: var(--petal);
+  margin-top: 14px; margin-bottom: 16px;
+}
+.footer__base {
+  padding-top: 26px;
+  display: flex; flex-wrap: wrap; gap: 14px;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  :root { --band-y: 72px; }
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .grid--split { grid-template-columns: 1fr; gap: 36px; }
+  .footer__top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 900px) {
+  body { font-size: 17px; }
+  .menu-toggle { display: block; }
+  .brand__name { display: none; }
+  .nav {
+    display: none;
+    position: absolute; left: 0; right: 0; top: 100%;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 10px var(--gutter) 22px;
+  }
+  .nav.is-open { display: flex; }
+  .nav a { padding-top: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .nav .btn { margin-top: 16px; text-align: center; }
+  .topbar__inner { position: relative; }
+
+  /* Narrow screens: the headline wraps to more lines, so the band grows
+     taller on its own — pull the padding in so it doesn't tower. */
+  .hero { padding-top: 34px; padding-bottom: 38px; background-size: 128% 100%; }
+  .hero h1 { max-width: none; }
+}
+
+@media (max-width: 760px) {
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+  .record__row { grid-template-columns: 1fr; gap: 10px; }
+  .field--row { grid-template-columns: 1fr; }
+  .download { grid-template-columns: 1fr; text-align: left; }
+  .footer__top { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+@media print {
+  .topbar, .footer, .btn { display: none; }
+  .hero { background: none; }
+  body { font-size: 12pt; color: #000; }
+}
