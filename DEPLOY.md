@@ -1,127 +1,81 @@
 # Getting www.ccpofbc.org live
 
-You have Cloudflare and GitHub, which gives you two ways to do this. Both use
-GitHub to hold the files. They differ in who serves them.
+Your repository is `PamelaSSOCC/CCPofBC`, connected to a Cloudflare Worker that
+is already building successfully. What follows picks up from there.
 
-## Which one
+## You are on Workers, not Pages
 
-**Cloudflare Pages** (recommended). GitHub holds the code, Cloudflare builds and
-serves it.
+Cloudflare has been folding Pages into Workers, and the dashboard now steers new
+projects to Workers by default. That is what you created — the giveaway is the
+deploy command `npx wrangler deploy`, which is a Workers command. Pages projects
+do not have one.
 
-- Your DNS is already at Cloudflare, so connecting the domain creates the records
-  for you. Nothing to type by hand.
-- No certificate problems. This is the real argument: GitHub Pages issues its own
-  certificate, and Cloudflare's proxy sitting in front of it interferes with that
-  process. The workaround is to turn the proxy off, wait for GitHub to issue,
-  then turn it back on — and if you forget, or if your SSL/TLS mode is set to
-  Flexible, you get an infinite redirect loop that looks like the site is broken.
-  Cloudflare Pages has no such conflict.
-- The repository can be private. GitHub Pages needs a paid plan for that.
-- Every branch gets a preview URL, so you can look at a change before it's live.
+**This is fine.** Workers is where Cloudflare is putting its effort, and it
+serves static sites well. You do not need to start over. But a Worker needs a
+configuration file telling it what to serve, which a Pages project would not, and
+that is the piece that is missing.
 
-Against it: it's a second dashboard to learn, and there is no built-in form
-handling (see the last section).
-
-**GitHub Pages.** Simpler idea — the repository *is* the website. The `CNAME`
-file in this folder is already set up for it. But with Cloudflare in front you
-still have to create the apex redirect in Cloudflare anyway, so you end up in
-both dashboards regardless, and you inherit the certificate problem above.
-
-The rest of this guide assumes Cloudflare Pages. If you'd rather use GitHub
-Pages, keep `CNAME` and skip to Part 3.
-
----
-
-## Part 1 — Put the files on GitHub
-
-**1. Create the repository.**
-On GitHub, click **+** (top right) → **New repository**. Name it something like
-`ccpofbc-website`. Private is fine. Do **not** tick "Add a README file" — this
-folder already has one.
-
-**2. Upload the files.**
-On the empty repository page, click **uploading an existing file**. Drag in the
-*contents* of the site folder — not the folder itself.
-
-The structure on GitHub must look like this, with `index.html` at the top level:
+Three files are now in the site folder for this:
 
 ```
-index.html
-join.html
-benefits.html
-quality-assessment.html
-data-research.html
-sitemap.xml
-robots.txt
-README.md
-DEPLOY.md
-assets/...
+wrangler.jsonc    Tells the Worker to serve this folder as a static site
+.assetsignore     Keeps README.md and DEPLOY.md from being served publicly
+404.html          Shown when a URL matches no page
 ```
 
-If you end up with `ccpofbc/index.html` instead of `index.html`, the site will
-not load. Delete and re-upload the contents rather than the folder.
-
-Drag the `assets` folder in as a folder — GitHub keeps the structure.
-
-**3. Delete `CNAME`.**
-That file is a GitHub Pages instruction. On Cloudflare Pages it does nothing and
-will confuse whoever looks at this next. Click it, then the bin icon, then commit.
-
-**4. Commit.**
-Scroll down, write something like "Initial site", click **Commit changes**.
+The `CNAME` file is gone — that was for GitHub Pages and does nothing here.
 
 ---
 
-## Part 2 — Connect Cloudflare Pages
+## Part 1 — Upload the three new files
 
-**5. Create the project.**
-Cloudflare dashboard → **Compute (Workers & Pages)** in the sidebar → **Create**
-→ **Pages** tab → **Connect to Git**.
+Download the current zip, extract it, and upload `wrangler.jsonc`,
+`.assetsignore` and `404.html` to the root of your `PamelaSSOCC/CCPofBC`
+repository, alongside `index.html`. Delete `CNAME` while you are there.
 
-**6. Authorise and pick the repository.**
-Cloudflare will ask for access to GitHub. You can grant access to only this one
-repository rather than all of them. Select `ccpofbc-website`, click **Begin
-setup**.
+On GitHub: **Add file** → **Upload files** → drag them in → **Commit changes**.
 
-**7. Build settings.**
-This is where people get stuck, because the site has no build step and the form
-wants build instructions.
+One quirk: GitHub's web uploader sometimes refuses files whose names begin with a
+dot. If `.assetsignore` will not upload, use **Add file** → **Create new file**
+instead, type `.assetsignore` as the filename, and paste the contents in by hand.
 
-| Field | Value |
-| --- | --- |
-| Project name | `ccpofbc` |
-| Production branch | `main` |
-| Framework preset | **None** |
-| Build command | **leave empty** |
-| Build output directory | `/` |
-
-If `/` is rejected, leave the field empty instead. Both mean "the files are at
-the top level, just serve them".
-
-**8. Save and Deploy.**
-It takes under a minute. You get a URL like `ccpofbc.pages.dev`. Open it and
-check the site works before going any further — if something is wrong, it is much
-easier to diagnose here than after the domain is pointed at it.
-
-**9. Add the domain.**
-In the project → **Custom domains** tab → **Set up a custom domain** → enter
-`www.ccpofbc.org` → **Continue** → **Activate domain**.
-
-Cloudflare creates the DNS record itself. Certificate issuance usually takes a
-few minutes and can take up to fifteen. The status will say "Initializing" and
-then "Active".
+The deploy runs automatically on commit. Watch it in the Cloudflare dashboard
+under your Worker → **Deployments**.
 
 ---
 
-## Part 3 — Redirect the bare domain to www
+## Part 2 — Check it actually serves
 
-Right now `ccpofbc.org` with no `www` goes nowhere. Two steps.
+Your Worker has a free address ending in `.workers.dev`. Find it in the Cloudflare
+dashboard under your Worker → **Settings** → **Domains & Routes**.
 
-**10. Give the apex a DNS record to catch.**
-A redirect rule can only fire on a request Cloudflare actually receives, so the
-hostname needs a proxied record even though nothing is behind it.
+Open it. You should see the site with the pink brush band across the top. If you
+see plain unstyled text, the CSS is not being found — check that `assets/` and
+its contents made it into the repository.
 
-Cloudflare dashboard → your domain → **DNS** → **Add record**:
+Also try a made-up address like `/nope` — you should get the styled 404 page
+rather than a Cloudflare error.
+
+---
+
+## Part 3 — Point the domain at it
+
+In the Cloudflare dashboard: your Worker → **Settings** → **Domains & Routes** →
+**Add** → **Custom domain** → enter `www.ccpofbc.org` → **Add domain**.
+
+Cloudflare creates the DNS record and issues the certificate itself, usually
+within a few minutes. This is the step that would have been under "Custom
+domains" on a Pages project — same idea, different menu.
+
+### Redirect the bare domain
+
+`ccpofbc.org` with no `www` still goes nowhere. Two steps.
+
+**Give the apex a record to catch.** A redirect rule only fires on a request
+Cloudflare actually receives, so the hostname needs a proxied record even though
+nothing sits behind it.
+
+Your domain → **DNS** → **Add record**:
 
 | Field | Value |
 | --- | --- |
@@ -130,12 +84,12 @@ Cloudflare dashboard → your domain → **DNS** → **Add record**:
 | IPv6 address | `100::` |
 | Proxy status | **Proxied** (orange cloud — this matters) |
 
-`100::` is the IPv6 discard address. Nothing is listening there, which is fine:
-the orange cloud means Cloudflare answers the request itself and never forwards
-it. If you prefer IPv4, an `A` record to `192.0.2.1` does the same job.
+`100::` is the IPv6 discard address. Nothing is listening there, which is the
+point: the orange cloud means Cloudflare answers the request itself and never
+forwards it.
 
-**11. Create the redirect rule.**
-Your domain → **Rules** → **Redirect Rules** → **Create rule**.
+**Create the rule.** Your domain → **Rules** → **Redirect Rules** → **Create
+rule**:
 
 - **Rule name:** `Apex to www`
 - **When incoming requests match:** Custom filter expression
@@ -145,47 +99,44 @@ Your domain → **Rules** → **Redirect Rules** → **Create rule**.
   - Status code: **301**
   - Tick **Preserve query string**
 
-Use *Dynamic* rather than Static. A static redirect sends every visitor to the
-home page, so an old link to `ccpofbc.org/quality-assessment.html` would land on
-the front page instead of the page someone was sent to. The expression above
-keeps the path.
+Use *Dynamic*, not Static. A static redirect sends every visitor to the home
+page, so an old link to `ccpofbc.org/quality-assessment.html` would lose its
+destination.
 
-**12. Check the SSL/TLS mode.**
-Your domain → **SSL/TLS** → **Overview**. It must be **Full** or **Full
-(strict)**. If it is set to **Flexible**, you get a redirect loop. This is the
-single most common cause of "my Cloudflare site won't load".
+**Check the SSL/TLS mode.** Your domain → **SSL/TLS** → **Overview**. It must be
+**Full** or **Full (strict)**. If it is set to **Flexible** you get a redirect
+loop, which is the most common cause of "my Cloudflare site won't load".
 
 ---
 
 ## Part 4 — Verify
 
-Work through these in a browser:
-
-- `https://www.ccpofbc.org` loads, with a padlock
+- `https://www.ccpofbc.org` loads with a padlock
 - `http://ccpofbc.org` redirects to `https://www.ccpofbc.org`
 - `ccpofbc.org/quality-assessment.html` lands on the BCQAS page, not the home page
-- The CCPBC logo appears in the header and the favicon appears in the tab
+- `www.ccpofbc.org/nope` shows the styled 404 page
+- `www.ccpofbc.org/DEPLOY.md` returns the 404 page, not the file — this confirms
+  `.assetsignore` is working
+- The logo appears in the header and the favicon in the tab
 - All five nav links work, and the menu button works on a phone
-- The BCQAS download starts (it's 1.4 MB, so give it a moment)
-- The newsletter form works (see Part 6 — until Formspree is connected it
-  opens your email app with the fields filled in, which is expected)
-- Paste `https://www.ccpofbc.org` into a Facebook post box — the preview card
-  should appear. Don't post it; just check the preview, then delete.
+- The BCQAS download starts (1.4 MB, give it a moment)
+- Paste the address into a Facebook post box and check the preview card appears,
+  then delete without posting
 
 Then tell Google the site exists: **Google Search Console** → add
-`https://www.ccpofbc.org` as a property (Cloudflare DNS verification is the
-easiest method) → **Sitemaps** → submit `sitemap.xml`.
+`https://www.ccpofbc.org` as a property (Cloudflare DNS verification is easiest)
+→ **Sitemaps** → submit `sitemap.xml`.
 
 ---
 
 ## Part 5 — Changing the site later
 
-Edit the file on GitHub, commit, and Cloudflare redeploys within about a minute.
-No other steps. To edit a page: open it in the repository, click the pencil icon,
-change the text, scroll down, **Commit changes**.
+Edit the file on GitHub, commit, and the Worker redeploys within about a minute.
+To edit a page: open it in the repository, click the pencil icon, change the
+text, scroll down, **Commit changes**.
 
-If a change breaks something, the Pages project has a **Deployments** list with a
-**Rollback** button on every previous version.
+If a change breaks something, your Worker has a **Deployments** list with the
+option to roll back to any previous version.
 
 ---
 

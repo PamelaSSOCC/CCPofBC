@@ -1,0 +1,29 @@
+{
+  // Cloudflare Workers configuration for the CCPofBC website.
+  //
+  // This is a static site: there is no server-side code, so there is no "main"
+  // entry point. The "assets" block below is what tells Wrangler to upload the
+  // files in this repository and serve them directly.
+  //
+  // Without this file, `npx wrangler deploy` has nothing to deploy.
+
+  "name": "ccpofbc",
+
+  // Cloudflare pins runtime behaviour to this date so that future platform
+  // changes cannot silently break the site. Leave it alone unless you have a
+  // reason to move it.
+  "compatibility_date": "2026-08-27",
+
+  "assets": {
+    // "./" means the repository root, which is where index.html lives.
+    "directory": "./",
+
+    // Serve 404.html when a URL matches no file, instead of a bare error.
+    "not_found_handling": "404-page"
+  },
+
+  // Gives the site a free ccpofbc.workers.dev address for testing, separate
+  // from the real domain. Set to false once www.ccpofbc.org is live if you
+  // would rather only have one public address.
+  "workers_dev": true
+}

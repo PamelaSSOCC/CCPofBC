@@ -13,7 +13,9 @@ quality-assessment.html  The BCQAS + free download
 data-research.html       Data & research — coming soon
 sitemap.xml              Lists all five pages for search engines
 robots.txt               Points crawlers at the sitemap
-CNAME                    Custom domain for GitHub Pages (delete on Cloudflare Pages)
+404.html                 Shown when a URL matches no page
+wrangler.jsonc           Tells the Cloudflare Worker to serve this as a static site
+.assetsignore            Keeps README.md and DEPLOY.md from being served publicly
 DEPLOY.md                Step-by-step guide to getting the site live
 assets/styles.css        All styling. Colours and type are tokens at the top.
 assets/site.js           Mobile menu + newsletter form
@@ -147,6 +149,13 @@ record until you move to a provider that stores it for you.
 ---
 
 ## Hosting and DNS for www.ccpofbc.org
+
+The site is deployed as a **Cloudflare Worker** with static assets, built from
+the `PamelaSSOCC/CCPofBC` GitHub repository. Cloudflare has been folding Pages
+into Workers, so new projects land on Workers by default now — the tell is the
+`npx wrangler deploy` deploy command. A Worker needs `wrangler.jsonc` to know
+what to serve; a Pages project would not. Step-by-step instructions are in
+`DEPLOY.md`.
 
 Every page declares `https://www.ccpofbc.org` as its canonical URL, and the sitemap,
 robots.txt and social tags all point there. If you end up on a different domain,
