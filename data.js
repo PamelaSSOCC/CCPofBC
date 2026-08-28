@@ -48,7 +48,7 @@ const CENTRES = [
     facebook: "https://www.facebook.com/p/Crystal-Star-Daycare-an-InfantToddler-Child-Care-100054590433583/"
   },
   {
-    name: "Kiddo House Montessori", photo: "kiddo.jpg", days: "Sat Oct 3 (AM)",
+    name: "Kiddo House Montessori", photo: "kiddo.png", days: "Sat Oct 3 (AM)",
     care: "30 months \u2013 school age, School-aged care", philosophy: "Montessori",
     address: "6640 Blundell Road, Richmond, BC",
     hours: "Full day", closures: "Winter break",
@@ -112,7 +112,7 @@ const CENTRES = [
     phone: "778-999-9229", website: "https://www.littlekoalamontessori.com"
   },
   {
-    name: "Blue Whale Children's Learning Centre", photo: "bluewhale.jpg", days: "Sat Oct 3 (AM)",
+    name: "Blue Whale Children's Learning Centre", photo: "bluewhale.png", days: "Sat Oct 3 (AM)",
     care: "30 months \u2013 school age", philosophy: "Blended (Montessori, purposeful play)",
     address: "8060 No. 1 Road, Richmond, BC",
     hours: "8:00 am \u2013 5:00 pm", closures: "Spring break, winter break",
@@ -123,7 +123,7 @@ const CENTRES = [
     phone: "604-754-7666", website: "https://www.bluewhaleedu.com"
   },
   {
-    name: "Cedar Studio Outdoor Learning", photo: "cedar.jpg", days: "Both days",
+    name: "Cedar Studio Outdoor Learning", photo: "cedar.png", days: "Both days",
     care: "30 months \u2013 school age", philosophy: "Blended (Reggio-inspired, outdoor / land-based)",
     address: "Units 135 & 140, 6231 London Road, Richmond, BC",
     hours: "8:00 am \u2013 5:00 pm", closures: "One week spring, two weeks winter",
@@ -135,7 +135,7 @@ const CENTRES = [
     phone: "604-783-1014", website: "https://www.cedarstudio.co"
   },
   {
-    name: "Kid Nest Infant and Toddler Daycare", photo: "kidsnest.jpg", days: "Sat Oct 3 (AM)",
+    name: "Kid Nest Infant and Toddler Daycare", photo: "kidsnest.png", days: "Sat Oct 3 (AM)",
     care: "Infant/Toddler", philosophy: "Blended (Montessori, play-based)",
     address: "8531 Leslie Road, Richmond, BC V6X 1E6",
     hours: "8:30 am \u2013 6:00 pm, Mon\u2013Fri", closures: "Winter break",
@@ -171,7 +171,7 @@ const CENTRES = [
     phone: "778-798-8861", website: "https://www.ccssociety.ca"
   },
   {
-    name: "Terra Nova Nature School", photo: "", days: "Both days",
+    name: "Terra Nova Nature School", photo: "terranova.png", days: "Both days",
     care: "Preschool", philosophy: "Blended (nature-based, emergent)",
     address: "2680 River Road, Richmond, BC",
     hours: "9:00 am \u2013 1:00 pm; some afternoons 1:30 \u2013 3:30 pm",
@@ -217,7 +217,7 @@ const CENTRES = [
     instagram: "Lesco_Montessori", facebook: "https://www.facebook.com/p/Lesco-Montessori-School-100039731937048/"
   },
   {
-    name: "Dino-Mites Preschool", photo: "", days: "Sat Oct 3 (AM)",
+    name: "Dino-Mites Preschool", photo: "dinomites.png", days: "Sat Oct 3 (AM)",
     care: "Preschool", philosophy: "Play-based",
     address: "4071 Francis Road, Richmond, BC V7C 1J8",
     hours: "9:00 am \u2013 1:00 pm", closures: "Winter break, spring break, and summer",
@@ -240,7 +240,7 @@ const CENTRES = [
     phone: "778-866-3572", website: "https://royalblueheronmontessoriacademy.ca"
   },
   {
-    name: "Renaissance Kids", photo: "renkids.jpg", days: "Both days",
+    name: "Renaissance Kids", photo: "renkids.png", days: "Both days",
     care: "Infant/Toddler, 30 months \u2013 school age, School-aged care", philosophy: "Blended (Reggio, Montessori, academic)",
     address: "#1\u201312491 No. 2 Road, Richmond, BC",
     hours: "7:00 am \u2013 5:30 pm", closures: "Winter break",
@@ -299,7 +299,7 @@ const CENTRES = [
     phone: "604-762-8181", website: "https://www.hatchkidslearning.com"
   },
   {
-    name: "Noah's Ark Montessori Reggio Preschool & Kindergarten", photo: "ark.jpg", days: "Sat Oct 3 (AM)",
+    name: "Noah's Ark Montessori Reggio Preschool & Kindergarten", photo: "ark.png", days: "Sat Oct 3 (AM)",
     care: "30 months \u2013 school age, School-aged care", philosophy: "Blended (Montessori, Reggio Emilia, outdoor)",
     address: "11371 No. 3 Road, Richmond, BC V7A 1X3",
     hours: "8:30 am \u2013 4:30 pm", closures: "",
