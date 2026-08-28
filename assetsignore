@@ -1,0 +1,22 @@
+# Files in this repository that must NOT be served to the public.
+# Same format as .gitignore. Wrangler skips anything matched here.
+
+# ---------------------------------------------------------------
+# CRITICAL: the repository's own git database.
+# The assets directory is the repo root, so without these two lines
+# Wrangler uploads .git/ — the complete history and remote config —
+# and serves it publicly at /.git/config, /.git/objects/... etc.
+# ---------------------------------------------------------------
+.git
+.gitignore
+.wrangler
+node_modules
+
+# Housekeeping docs. Harmless, but no reason to publish them.
+README.md
+DEPLOY.md
+wrangler.jsonc
+.assetsignore
+
+# Left over from the GitHub Pages route; not used on Cloudflare.
+CNAME
