@@ -136,15 +136,19 @@ h4 {
 p { margin: 0 0 20px; }
 p:last-child { margin-bottom: 0; }
 
+/* Intro paragraph. Deliberately NOT the display face: Playfair is a high-
+   contrast display type drawn for headlines, and set italic in grey it was
+   hard work to read at paragraph length. Body face, upright, full-strength
+   text colour; the size alone marks it as an intro. */
 .lede {
-  font-family: var(--display);
-  font-style: italic;
+  font-family: var(--body);
+  font-style: normal;
   font-weight: 400;
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  line-height: 1.5;
-  color: var(--muted);
+  font-size: clamp(1.08rem, 1.55vw, 1.26rem);
+  line-height: 1.6;
+  color: var(--plum);
 }
-.band--ink .lede { color: #E4CBD5; }
+.band--ink .lede { color: #F0DEE5; }
 .band--petal .lede { color: var(--plum); }
 
 /* Signature: the logo's wash colour, brushed behind a word */
@@ -185,6 +189,20 @@ p:last-child { margin-bottom: 0; }
 
 .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
+/* Buttons keep their own colours inside tinted bands. The band link rules
+   (.band--ink a, .band--petal a) are more specific than .btn--dark on its
+   own, so without these a button in one of those bands loses its text
+   colour and can fail contrast. */
+.band--ink .btn--dark, .band--petal .btn--dark,
+.band--ink .btn--primary, .band--petal .btn--primary,
+.band--ink .btn--dark:hover, .band--petal .btn--dark:hover,
+.band--ink .btn--primary:hover, .band--petal .btn--primary:hover { color: var(--white); }
+
+.band--petal .btn--ghost { color: var(--plum); border-color: var(--plum); }
+.band--petal .btn--ghost:hover { background: var(--plum); color: var(--white); }
+.band--ink .btn--ghost { color: var(--white); border-color: var(--white); }
+
+
 /* ---------- Header ---------- */
 .topbar {
   position: sticky; top: 0; z-index: 100;
@@ -212,6 +230,7 @@ p:last-child { margin-bottom: 0; }
 
 .nav { display: flex; align-items: center; gap: 22px; }
 .nav a {
+  white-space: nowrap;
   font-family: var(--body);
   font-size: 0.76rem; font-weight: 600;
   letter-spacing: 0.13em; text-transform: uppercase;
@@ -386,7 +405,7 @@ p:last-child { margin-bottom: 0; }
 /* ---------- Download panel ---------- */
 .download {
   display: grid; grid-template-columns: auto 1fr auto;
-  gap: 28px; align-items: center;
+  gap: 28px; align-items: start;
   border: 1px solid var(--petal);
   outline: 1px solid var(--petal);
   outline-offset: 6px;
@@ -482,6 +501,12 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 1080px) {
+  /* The full name beside the logo crowds the nav onto two lines here. */
+  .brand__name { display: none; }
+  .nav { gap: 18px; }
+}
+
 @media (max-width: 980px) {
   :root { --band-y: 72px; }
   .grid--4 { grid-template-columns: repeat(2, 1fr); }
