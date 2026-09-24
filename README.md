@@ -26,10 +26,36 @@ assets/social-card.png   Site-wide link preview image (1200x630)
 assets/favicon.svg       Browser tab icon
 assets/BCQAS.pdf         The standard (also .docx)
 assets/BCQAS-FAQ.pdf     The FAQ (also .docx)
+assets/bc_occupational_competencies.pdf   Province of BC competencies (reference)
+assets/pathway-to-universal-child-care-2028.pdf   CCPBC report, Sept 2026
+assets/pathway-policy-proposals-2028.pdf   The ten proposals, with sources
+assets/BC_district_spaces_vs_children_2018_2020_2026.xlsx   Open dataset
 ```
 
 Contact is handled by `mailto:CCPofBC@gmail.com` links in the footer of every
 page and in a contact strip at the bottom of each page.
+
+---
+
+## Serving the repository root
+
+`wrangler.jsonc` sets the assets directory to `./`, which is the repository root.
+That is the simplest arrangement for a site with no build step, but it has one
+sharp edge: **everything in the repository is a candidate for publication,
+including `.git`.** The first Cloudflare build did exactly that, serving the full
+commit history at `/.git/config` until `.assetsignore` was added.
+
+So `.assetsignore` is not optional housekeeping here — it is the only thing
+keeping the repository's internals off the public web. If you ever add files to
+this repository that should not be public, add them to that list at the same
+time. Check a deploy log occasionally: the uploaded file count should be roughly
+the number of files in the site, and if it jumps you are publishing something new
+by accident.
+
+The alternative is moving the site into a `public/` subfolder and pointing
+`assets.directory` at that instead, so publication is opt-in rather than opt-out.
+That is the safer structure and worth doing if this repository ever grows beyond
+the website.
 
 ---
 
@@ -203,6 +229,100 @@ without the mailto workaround. Cloudflare Pages has no equivalent — there you
 would write a Pages Function yourself, or point the form at a service like
 Formspree. Since you need a sending tool regardless, going straight to a
 mailing-list provider avoids handling the same addresses twice.
+
+---
+
+## Large PDFs
+
+`pathway-to-universal-child-care-2028.pdf` was supplied at 5.5 MB, which is a
+punishing download on rural BC internet. Its images were laid out at 300 dpi
+(print resolution); halving them to roughly 150 dpi brought the file to 1.9 MB,
+a 66% reduction, with the charts and text untouched because those are vector and
+unaffected by image resampling. Page 22 renders pixel-identical to the original.
+
+Its companion, `pathway-policy-proposals-2028.pdf`, needed no such treatment: at
+612 KB over 19 pages it is text and vector weight, not images. Check before
+compressing &mdash; `pdfimages -list` tells you whether images are the problem.
+
+If you add another image-heavy report, do the same before uploading. The method:
+downsample any image whose long edge exceeds about 1100 px, re-encode at JPEG
+quality 82, and resize any transparency mask in step so it stays aligned.
+
+---
+
+## Community plans (`community-plans.html`)
+
+A separate page listing 22 municipal child care plans from 17 communities,
+linked from the Data &amp; Research page and the footer. The PDFs live in
+`assets/plans/`.
+
+**The filenames are kept exactly as supplied** &mdash; spaces, mixed case,
+`Assesment` typo and all &mdash; and the page percent-encodes them in the links
+instead. That means nothing has to be renamed before uploading, which is the
+step most likely to go wrong. The trade-off is URLs like
+`assets/plans/Bowen%20Island%20Community%20Child%20Care%20Plan.pdf`. Ugly in the
+address bar, invisible to anyone clicking a link.
+
+To add a plan later: drop the PDF in `assets/plans/`, then add a `.plan` block
+to the page. Copy an existing one &mdash; the only fiddly part is the href, where
+every space becomes `%20`.
+
+---
+
+## Replacing the reports and the dataset
+
+All three downloads are linked by fixed filenames, so a newer version replaces
+the old one with no HTML change at all &mdash; upload over the top in `assets/`
+and the page picks it up:
+
+```
+pathway-to-universal-child-care-2028.pdf
+pathway-policy-proposals-2028.pdf
+BC_district_spaces_vs_children_2018_2020_2026.xlsx
+```
+
+Two things to check when you do. The page states each document's page count and
+date; if those change, update `data-research.html` in the same commit. And
+remember the Cloudflare cache &mdash; add `?x=1` to the URL to confirm, since a
+normal refresh and an incognito window both read the cached copy.
+
+---
+
+## The intro paragraph (`.lede`)
+
+It was originally set in Playfair Display, italic, in muted grey. Three things
+working against legibility at once: Playfair is a *display* face, drawn for
+headlines and very high-contrast in its strokes; italic slows reading at
+paragraph length; and grey at 6.5:1 is the dimmest text on the site.
+
+It is now the body face, upright, in full-strength plum &mdash; 15.8:1 on white,
+up from 6.5:1. Size alone marks it as an intro. Playfair still does all the
+headings, which is what it is good at.
+
+The references list on the quality assessment page had the same problem in
+miniature: grey, and italic on the citation titles. It is now plum, with titles
+marked by weight instead of slant.
+
+The only italic left on the site is the pull quote &mdash; large, short, and plum
+on pink at 8.1:1, where the slant is doing design work rather than fighting the
+reader.
+
+The rest of the grey text (`--muted`, used for card and download copy) is
+upright, smaller, and clears AA at 6.5:1, so it was left alone &mdash; say the
+word if you want that darkened too.
+
+---
+
+## A CSS trap worth knowing
+
+`.band--ink a` and `.band--petal a` are more specific than `.btn--dark`, so a
+button dropped into one of those tinted bands used to inherit the band's link
+colour and lose its own — dark red text on a dark plum button, about 1.6:1
+contrast. It went unnoticed because no button had ever been placed in one of
+those bands until the report feature on the homepage.
+
+There are now explicit rules restoring button colours inside tinted bands. If
+you add a new band variant later, add the matching button rule with it.
 
 ---
 
